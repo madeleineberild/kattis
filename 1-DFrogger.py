@@ -1,19 +1,29 @@
-print("1-D Frogger (Easy)")
+def readInput():
+    with open('input.txt') as file:
+        lines = file.readlines()
+    return lines
 
-with open('input.txt') as file:
-    lines = file.readlines()
+def isDead():
+    return true
 
-firstLine = lines[0].split(' ')
-secondLine = lines[1].split(' ')
+def main():
+    print("1-D Frogger (Easy)")
 
-numberOfBoardSquares = int(firstLine[0])
-startingSquare = int(firstLine[1])
-magicNumber = int(firstLine[2])
+    lines = readInput()
 
-board = [int(n) for n in secondLine]
+    firstLine = lines[0].split(' ')
+    secondLine = lines[1].split(' ')
 
-fate = enumerate(('magic', 'left', 'right', 'cycle'))
+    numberOfBoardSquares = int(firstLine[0])
+    startingSquare = int(firstLine[1])
+    magicNumber = int(firstLine[2])
+    board = [int(n) for n in secondLine]
+    fate = enumerate(('magic', 'left', 'right', 'cycle'))
+    hops = 0
 
-hops = 0
+
+
+if __name__ == "__main__":
+    main()
 
 
