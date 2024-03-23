@@ -1,6 +1,8 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <stack>
+
 
 class Query {
     public:
@@ -9,6 +11,18 @@ class Query {
         int r2;
         int c2;
 };
+
+void colorTheWorld(std::vector<std::vector<int>> &coloredWorld) {
+    std::stack<std::pair<int, int>> queue;
+// Flood-fill (node):
+//  1. If node is not Inside return.
+//  2. Set the node
+//  3. Perform Flood-fill one step to the south of node.
+//  4. Perform Flood-fill one step to the north of node
+//  5. Perform Flood-fill one step to the west of node
+//  6. Perform Flood-fill one step to the east of node
+//  7. Return.
+}
 
 int main()
 {
@@ -30,14 +44,31 @@ int main()
     }
 
     // actual algorithm
-    for (Query query : queries) {
-        char firstLocation = world[query.r1 - 1][query.c1 - 1];
-        char secondLocation = world[query.r2 - 1][query.c2 - 1];
-
-        if (firstLocation != secondLocation) {
-            std::cout << "neither" << std::endl;
+    std::vector<std::vector<int>> coloredWorld;
+    for (std::string row : world) {
+        std::vector<int> temp;
+        for (char col : row) {
+            temp.push_back((int)col);
         }
+        coloredWorld.push_back(temp);
+    }
 
-        // find way between the points, or not
+    colorTheWorld(coloredWorld);
+
+    for (Query query : queries) {
+        char startingPoint = world[query.r1 - 1][query.c1 - 1];
+
+        int coloredFirstLocation = coloredWorld[query.r1 - 1][query.c1 - 1];
+        int coloredSecondLocation = coloredWorld[query.r2 - 1][query.c2 - 1];
+
+        if (coloredFirstLocation != coloredSecondLocation) {
+            std::cout << "neither" << std::endl;
+        } else {
+            if (startingPoint == '0') {
+                std::cout << "binary" << std::endl;
+            } else {
+                std::cout << "decimal" << std::endl;
+            }
+        }
     }
 }
