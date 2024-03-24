@@ -4,14 +4,6 @@
 #include <stack>
 
 
-class Query {
-    public:
-        uint32_t r1;
-        uint32_t c1;
-        uint32_t r2;
-        uint32_t c2;
-};
-
 void printWorld(uint32_t **world, uint32_t rows, uint32_t cols) {
     std::cout << "------------" << std::endl;
     for(uint32_t row = 0; row < rows; row++) {
@@ -97,12 +89,6 @@ int main()
 
     int numberOfQueries;
     std::cin >> numberOfQueries;
-    std::vector<Query> queries;
-    for (int i = 0; i < numberOfQueries; i++) {
-        Query query;
-        std::cin >> query.r1 >> query.c1 >> query.r2 >> query.c2;
-        queries.push_back(query);
-    }
 
     // actual algorithm
     uint32_t **coloredWorld = new uint32_t*[r];
@@ -118,16 +104,19 @@ int main()
 
     uint32_t startColor = 2;
     uint32_t color = startColor;
+    uint32_t r1, c1, r2, c2;
 
-    for (Query query : queries) {
-        char startingPoint = world[query.r1 - 1][query.c1 - 1];
+    for (int i = 0; i < numberOfQueries; i++) {
+        std::cin >> r1 >> c1 >> r2 >> c2;
 
-        if (coloredWorld[query.r1 - 1][query.c1 - 1] < startColor) {
-            colorArea(coloredWorld, r, c, color, query.r1 - 1, query.c1 - 1);
+        char startingPoint = world[r1 - 1][c1 - 1];
+
+        if (coloredWorld[r1 - 1][c1 - 1] < startColor) {
+            colorArea(coloredWorld, r, c, color, r1 - 1, c1 - 1);
         }
 
-        int firstLocation = coloredWorld[query.r1 - 1][query.c1 - 1];
-        int secondLocation = coloredWorld[query.r2 - 1][query.c2 - 1];
+        int firstLocation = coloredWorld[r1 - 1][c1 - 1];
+        int secondLocation = coloredWorld[r2 - 1][c2 - 1];
         compare(firstLocation, secondLocation, startingPoint);
 
         color++;
