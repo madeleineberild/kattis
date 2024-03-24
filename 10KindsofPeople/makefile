@@ -13,7 +13,7 @@ compile:
 	$(CC) $(CFLAGS) $(FILE).cpp -o $(FILE).exe
 
 run:
-	./$(FILE).exe < $(INPUTDIR)/sample1.txt
+	./$(FILE).exe < $(INPUTDIR)/sample2.txt
 
 test:
 	for i in $(TESTS); do \
