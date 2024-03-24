@@ -1,6 +1,5 @@
 #include <iostream>
 #include <string>
-#include <vector>
 #include <stack>
 
 
@@ -19,7 +18,7 @@ void compare(uint32_t firstLocation, uint32_t secondLocation, char startingPoint
     if (firstLocation != secondLocation) {
         std::cout << "neither" << std::endl;
     } else {
-        if (startingPoint == '0') {
+        if (startingPoint == 0) {
             std::cout << "binary" << std::endl;
         } else {
             std::cout << "decimal" << std::endl;
@@ -54,57 +53,62 @@ void colorArea(uint32_t **coloredWorld, uint32_t r, uint32_t c, uint32_t newColo
         }
     }
 
-    std::stack<std::pair<uint32_t, uint32_t>> queue;
-    queue.push(std::make_pair(r1, c1));
+    std::stack<std::pair<uint32_t, uint32_t> *> queue;
+    std::pair<uint32_t, uint32_t> *pair = new std::pair<uint32_t, uint32_t>(r1, c1);
+    queue.push(pair);
     visited[r1][c1] = 1;
 
     while (!queue.empty()) {
-        std::pair<uint32_t, uint32_t> current = queue.top();
+        std::pair<uint32_t, uint32_t> *current = queue.top();
         queue.pop();
-        coloredWorld[current.first][current.second] = newColor;
+        coloredWorld[current->first][current->second] = newColor;
 
         for (int i = 0; i < 4; i++) {
-            uint32_t nextRow = current.first + delta_r[i];
-            uint32_t nextColumn = current.second + delta_c[i];
+            uint32_t nextRow = current->first + delta_r[i];
+            uint32_t nextColumn = current->second + delta_c[i];
 
             if (isValid(coloredWorld, r, c, visited, nextRow, nextColumn, targetColor)) {
                 visited[nextRow][nextColumn] = 1;
-                queue.push(std::make_pair(nextRow, nextColumn));
+                std::pair<uint32_t, uint32_t> *newPair = new std::pair<uint32_t, uint32_t>(nextRow, nextColumn);
+                queue.push(newPair);
             }
         }
+        delete current;
     }
-    //printWorld(visited, r, c);
+
+    for (uint32_t i = 0; i < r; i++) {
+        delete[] visited[i];
+    }
+    delete[] visited;
 }
 
 
 int main()
 {
-    // getting input
     uint32_t r, c;
     std::cin >> r >> c;
-    std::vector<std::string> world(r, "");
-    for(uint32_t i = 0; i < r; i++){
-        std::cin >> world[i];
-    }
 
-    int numberOfQueries;
-    std::cin >> numberOfQueries;
-
-    // actual algorithm
+    uint32_t **world = new uint32_t*[r];
     uint32_t **coloredWorld = new uint32_t*[r];
     for (uint32_t row = 0; row < r; row++) {
         coloredWorld[row] = new uint32_t[c];
+        world[row] = new uint32_t[c];
+        std::string temp;
+        std::cin >> temp;
 
         for (uint32_t col = 0; col < c; col++) {
-            coloredWorld[row][col] = static_cast<uint32_t>(world[row][col] - 48);
+            uint32_t digit = static_cast<uint32_t>(temp[col] - 48);
+            coloredWorld[row][col] = digit;
+            world[row][col] = digit;
         }
     }
-
-    // printWorld(coloredWorld, r, c);
 
     uint32_t startColor = 2;
     uint32_t color = startColor;
     uint32_t r1, c1, r2, c2;
+
+    int numberOfQueries;
+    std::cin >> numberOfQueries;
 
     for (int i = 0; i < numberOfQueries; i++) {
         std::cin >> r1 >> c1 >> r2 >> c2;
@@ -120,6 +124,7 @@ int main()
         compare(firstLocation, secondLocation, startingPoint);
 
         color++;
-        //printWorld(coloredWorld, r, c);
+        // printWorld(coloredWorld, r, c);
+        // printWorld(world, r, c);
     }
 }
